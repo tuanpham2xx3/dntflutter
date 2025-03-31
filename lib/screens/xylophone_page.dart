@@ -1,13 +1,24 @@
 import 'package:flutter/material.dart';
-// import 'package:audioplayers/audioplayers.dart'; // Uncomment khi cài đặt thư viện
+import 'package:audioplayers/audioplayers.dart';
 
 class XylophoneApp extends StatelessWidget {
   const XylophoneApp({Key? key}) : super(key: key);
 
-  // void playSound(int noteNumber) {
-  //   final player = AudioPlayer();
-  //   player.play(AssetSource('audio/note$noteNumber.wav'));
-  // }
+  // Create a single AudioPlayer instance to manage all sounds
+  static final AudioPlayer _player = AudioPlayer();
+
+  void playSound(int noteNumber) async {
+    try {
+      // Stop any currently playing sound
+      await _player.stop();
+      
+      // Play the new sound
+      await _player.play(AssetSource('audio/note$noteNumber.wav'));
+      print('Playing note $noteNumber');
+    } catch (e) {
+      print('Error playing sound: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +49,7 @@ class XylophoneApp extends StatelessWidget {
       child: TextButton(
         style: TextButton.styleFrom(backgroundColor: color),
         onPressed: () {
-          // playSound(noteNumber); // Uncomment khi cài đặt thư viện
-          print('Note $noteNumber played');
+          playSound(noteNumber);
         },
         child: const Text(''),
       ),
